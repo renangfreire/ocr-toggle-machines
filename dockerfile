@@ -23,6 +23,14 @@ RUN curl -L https://fly.io/install.sh | sh
 ADD . /app/
 WORKDIR /app
 
-RUN npm i
+RUN npm i && npm run build
 
-CMD [ "node" ]
+ENV FLYCTL_PATH=/root/.fly/bin/flyctl
+
+ENV PATH="$PATH:/root/.fly/bin"
+
+RUN chmod +x /root/.fly/bin/flyctl
+
+RUN echo 'alias fly=/root/.fly/bin/flyctl' >> ~/.bashrc
+
+CMD [ "node", "dist/server.js"]
